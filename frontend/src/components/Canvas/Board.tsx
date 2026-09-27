@@ -346,6 +346,19 @@ export function Board({
           contentStyle={{ width: '100%', height: '100%' }}
         >
           <div className="board__surface">
+            {/* Elements render first so text/shapes always sit behind
+                images and notes - they're an annotation layer, not
+                content cards. */}
+            {elements.map((element) => (
+              <CanvasElement
+                key={element.id}
+                element={element}
+                scaleRef={scaleRef}
+                autoFocus={element.id === focusElementId}
+                onUpdate={onUpdateElement}
+                onRemove={onRemoveElement}
+              />
+            ))}
             {images.map((image) => (
               <ImageCard
                 key={image.id}
@@ -367,16 +380,6 @@ export function Board({
                 onMove={onMoveNote}
                 onUpdate={onUpdateNote}
                 onRemove={onRemoveNote}
-              />
-            ))}
-            {elements.map((element) => (
-              <CanvasElement
-                key={element.id}
-                element={element}
-                scaleRef={scaleRef}
-                autoFocus={element.id === focusElementId}
-                onUpdate={onUpdateElement}
-                onRemove={onRemoveElement}
               />
             ))}
           </div>
