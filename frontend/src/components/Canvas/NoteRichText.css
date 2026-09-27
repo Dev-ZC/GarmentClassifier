@@ -1,0 +1,62 @@
+/* Formatted body for a note in "text" mode. */
+.note-rich-text {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.note-rich-text__toolbar {
+  display: flex;
+  gap: 2px;
+  margin: 0 0 4px -2px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.note-card:focus-within .note-rich-text__toolbar {
+  opacity: 1;
+}
+
+.note-rich-text__toolbar button {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.note-rich-text__toolbar button:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.note-rich-text__body {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+  outline: none;
+  user-select: text;
+  cursor: text;
+  min-height: 60px;
+}
+
+.note-rich-text__body[data-empty]::before {
+  content: attr(data-placeholder);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.note-rich-text__body ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+
+.note-rich-text__body li {
+  margin: 2px 0;
+}

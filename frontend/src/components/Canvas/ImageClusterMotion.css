@@ -1,0 +1,145 @@
+
+/* ---- Fan-out keyframes ----
+   Items start tucked behind the card edge and slide out to their slot;
+   delays stagger panel -> details -> minis -> note. */
+
+@keyframes cluster-panel-in-r {
+  from {
+    opacity: 0;
+    transform: translateX(-36px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cluster-panel-in-l {
+  from {
+    opacity: 0;
+    transform: translateX(36px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Minis slide along --ox/--oy so each one fans toward the card edge
+   it's anchored to rather than all moving on one axis. */
+@keyframes cluster-mini-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--ox, 0px), var(--oy, 14px)) scale(0.84);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cluster-note-in {
+  from {
+    opacity: 0;
+    transform: translateY(-22px) rotate(-6deg) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1.5deg) scale(1);
+  }
+}
+
+/* Gentle bob while a detail mini is hovered. */
+@keyframes cluster-mini-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* ---- Slide-back-in: the mirror of the fan-out. Elements slide into
+   the card edge they came from, then the wrap unmounts them. ---- */
+
+.cluster--closing .image-card-panel,
+.cluster--closing .image-card-detail,
+.cluster--closing .image-card-note {
+  /* Entrance animations use backwards fill so hover transforms work
+     afterwards; on the way out the end state must stick (invisible)
+     until React unmounts the cluster a beat later. */
+  animation-fill-mode: both;
+}
+
+.cluster--closing .image-card-panel {
+  animation-name: cluster-panel-out-r;
+  animation-delay: 0ms;
+}
+
+.cluster--closing.cluster-v1 .image-card-panel {
+  animation-name: cluster-panel-out-l;
+}
+
+.cluster--closing .image-card-detail {
+  animation-name: cluster-mini-out;
+  animation-delay: calc(30ms + var(--i, 0) * 35ms);
+}
+
+.cluster--closing .image-card-note {
+  animation-name: cluster-note-out;
+  animation-delay: 0ms;
+}
+
+@keyframes cluster-panel-out-r {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-32px) scale(0.97);
+  }
+}
+
+@keyframes cluster-panel-out-l {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(32px) scale(0.97);
+  }
+}
+
+@keyframes cluster-mini-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--ox, 0px), var(--oy, 14px)) scale(0.84);
+  }
+}
+
+@keyframes cluster-note-out {
+  from {
+    opacity: 1;
+    transform: rotate(-1.5deg) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px) rotate(-6deg) scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-card-panel,
+  .image-card-detail,
+  .image-card-note {
+    animation-duration: 0.01ms;
+    animation-delay: 0ms;
+  }
+}

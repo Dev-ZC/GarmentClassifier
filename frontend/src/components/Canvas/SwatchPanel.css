@@ -1,0 +1,112 @@
+/* ---- Swatch-bank additions: extracted swatch rows inside a parent's
+   info panel, the "good for" icon chips inside a swatch card's panel,
+   and the compact fabric strip on a closed swatch card. ---- */
+
+.image-card-panel__swatch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.image-card-panel__swatch-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.image-card-panel__swatch-item img {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.image-card-panel__swatch-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.image-card-panel__swatch-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-card-panel__swatch-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.image-card-panel__swatch-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+/* "Good for" garment chips inside a swatch card's open panel. */
+.swatch-panel__uses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.swatch-panel__use {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 6px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.swatch-panel__use svg {
+  color: var(--text);
+}
+
+/* Compact strip on a closed swatch card: fabric name + the garment
+   icons it suits, so the card reads as a swatch without opening it. */
+.image-card__fabric {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.image-card__fabric-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-card__fabric-uses {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-muted);
+}
+
+.image-card__fabric-uses svg {
+  display: block;
+}

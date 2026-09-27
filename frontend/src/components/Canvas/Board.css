@@ -1,0 +1,35 @@
+.board {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.board--drag-over::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px dashed var(--accent);
+  background: rgb(var(--accent-rgb) / 0.06);
+  pointer-events: none;
+  z-index: 30;
+}
+
+.board__surface {
+  position: relative;
+  width: 1px;
+  height: 1px;
+}
+
+.board__empty-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-faint);
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}

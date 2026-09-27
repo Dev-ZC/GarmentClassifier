@@ -1,0 +1,90 @@
+.theme-toggle {
+  position: relative;
+  width: 56px;
+  height: 32px;
+  flex-shrink: 0;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-toggle__end {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+}
+
+.theme-toggle__end--sun {
+  left: 7px;
+}
+
+.theme-toggle__end--moon {
+  right: 7px;
+}
+
+/* The knob slides over whichever end-icon matches the active theme and
+   carries that icon itself - the opposite icon stays visible as a hint
+   of what a click will switch to. */
+.theme-toggle__knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.theme-toggle--dark .theme-toggle__knob {
+  transform: translateX(24px);
+}
+
+.theme-toggle__knob svg {
+  position: absolute;
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s var(--ease-spring);
+}
+
+/* Light: sun face showing, moon spun out. */
+.theme-toggle__knob svg:first-child {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle__knob svg:last-child {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+
+.theme-toggle--dark .theme-toggle__knob svg:first-child {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+
+.theme-toggle--dark .theme-toggle__knob svg:last-child {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}

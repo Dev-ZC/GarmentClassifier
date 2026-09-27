@@ -1,0 +1,262 @@
+/* Floating canvas elements: text labels, rectangles, ellipses, and
+   arrows. Chrome-free compared to note cards - no header/footer - with
+   a small hover toolbar (palette, arrow flips, delete) and the same
+   bottom-right resize handle. --el-accent carries the element's palette
+   color, mapped to the same hexes as note accents so the systems read
+   as one. */
+.canvas-el {
+  --el-accent: var(--text-muted);
+  position: absolute;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.canvas-el:active {
+  cursor: grabbing;
+}
+
+.canvas-el[data-color='yellow'] { --el-accent: #e0b23f; }
+.canvas-el[data-color='blue'] { --el-accent: #5b8def; }
+.canvas-el[data-color='pink'] { --el-accent: #e07a9b; }
+.canvas-el[data-color='green'] { --el-accent: #5fae6a; }
+.canvas-el[data-color='purple'] { --el-accent: #9b7fd4; }
+.canvas-el[data-color='surface'] { --el-accent: var(--text-muted); }
+
+/* ---- Text label: invisible chrome, dashed bounding box appears on
+   hover/focus so the drag + resize area is discoverable. The padded
+   frame around the textarea is the drag grip; inside it, text behaves
+   like a normal field. ---- */
+
+.canvas-el--text {
+  /* The textarea fills the box, so this padding ring is the only place
+     a grab can land - keep it wide enough to be a real drag grip. */
+  padding: 5px;
+}
+
+.canvas-el--text,
+.canvas-el--arrow {
+  border: 1.5px dashed transparent;
+  border-radius: 8px;
+}
+
+.canvas-el--text:hover,
+.canvas-el--text:focus-within,
+.canvas-el--arrow:hover,
+.canvas-el--arrow:focus-within {
+  border-color: var(--border-strong);
+}
+
+.canvas-el__textarea {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+  background: transparent;
+  resize: none;
+  padding: 5px 8px;
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--el-accent);
+  overflow-y: auto;
+  cursor: text;
+}
+
+.canvas-el__textarea:focus {
+  outline: none;
+}
+
+.canvas-el__textarea::placeholder {
+  color: var(--text-faint);
+}
+
+/* "surface" means no tint chosen - plain text, muted shape strokes. */
+.canvas-el--text[data-color='surface'] .canvas-el__textarea {
+  color: var(--text);
+}
+
+/* ---- Rect + ellipse: tinted fill with an accent outline ---- */
+
+.canvas-el__shape {
+  width: 100%;
+  height: 100%;
+  border: 2.5px solid var(--el-accent);
+  background: color-mix(in srgb, var(--el-accent) 10%, transparent);
+  transition: box-shadow 0.15s ease;
+}
+
+.canvas-el__shape--rect {
+  border-radius: 10px;
+}
+
+.canvas-el__shape--ellipse {
+  border-radius: 50%;
+}
+
+.canvas-el:hover .canvas-el__shape {
+  box-shadow: 0 0 0 1px var(--el-accent);
+}
+
+/* ---- Arrow: SVG lines in the accent color; the dashed frame above
+   marks its otherwise-invisible bounding box on hover ---- */
+
+.canvas-el__arrow {
+  display: block;
+  pointer-events: none;
+}
+
+.canvas-el__arrow line {
+  stroke: var(--el-accent);
+  stroke-width: var(--arrow-stroke, 3);
+  stroke-linecap: round;
+}
+
+/* ---- Hover toolbar: palette + kind-specific actions + delete ---- */
+
+.canvas-el__tools {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  /* Grace period before fading out - plus the invisible bridge below -
+     so the cursor can travel the gap to the toolbar without it
+     collapsing mid-hover. */
+  transition: opacity 0.15s ease 0.3s;
+}
+
+/* Invisible hover bridge covering the gap between the toolbar and the
+   element (and a little slack to each side); it's part of the toolbar,
+   so crossing it keeps .canvas-el hovered and the toolbar alive. */
+.canvas-el__tools::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -16px;
+  right: -16px;
+  height: 14px;
+}
+
+.canvas-el:hover .canvas-el__tools,
+.canvas-el:focus-within .canvas-el__tools {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.canvas-el__tools-divider {
+  width: 1px;
+  height: 20px;
+  flex-shrink: 0;
+  background: var(--border);
+}
+
+.canvas-el__dot {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgb(0 0 0 / 0.2);
+  cursor: pointer;
+  transition:
+    transform 0.12s var(--ease-spring),
+    box-shadow 0.12s ease;
+}
+
+.canvas-el__dot:hover {
+  transform: scale(1.18);
+}
+
+.canvas-el__dot--active {
+  box-shadow:
+    0 0 0 2px var(--surface-2),
+    0 0 0 3.5px var(--text);
+}
+
+.canvas-el__dot--yellow { background: #e0b23f; }
+.canvas-el__dot--blue { background: #5b8def; }
+.canvas-el__dot--pink { background: #e07a9b; }
+.canvas-el__dot--green { background: #5fae6a; }
+.canvas-el__dot--purple { background: #9b7fd4; }
+.canvas-el__dot--surface { background: var(--surface); border-color: var(--border-strong); }
+
+.canvas-el__icon-btn {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.canvas-el__icon-btn:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.canvas-el__icon-btn--danger:hover {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+/* A− / A+ font steppers on text elements - label buttons rather than
+   icons so the action reads at a glance. */
+.canvas-el__font-btn {
+  width: auto;
+  padding: 0 9px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* ---- Resize handle: same corner bracket as note cards ---- */
+
+.canvas-el__resize {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.canvas-el:hover .canvas-el__resize,
+.canvas-el:focus-within .canvas-el__resize {
+  opacity: 1;
+}
+
+.canvas-el__resize::before {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-faint);
+  border-bottom: 2px solid var(--text-faint);
+  border-radius: 0 0 2px 0;
+}

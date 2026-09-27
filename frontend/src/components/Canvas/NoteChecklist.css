@@ -1,0 +1,92 @@
+/* Checklist body for a note in "checklist" mode. */
+.note-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.note-checklist__row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.note-checklist__check {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border-radius: 4px;
+  border: 1.5px solid var(--border-strong);
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.note-checklist__check--ghost {
+  border-style: dashed;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.note-checklist__check-mark {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--note-accent);
+}
+
+.note-checklist__row--done .note-checklist__check {
+  border-color: var(--note-accent);
+  background: var(--note-accent);
+}
+
+.note-checklist__row--done .note-checklist__input {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.note-checklist__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  font-size: 13px;
+  color: var(--text);
+  padding: 1px 0;
+}
+
+.note-checklist__input:focus {
+  outline: none;
+}
+
+.note-checklist__input::placeholder {
+  color: var(--text-faint);
+}
+
+.note-checklist__remove {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.note-checklist__row:hover .note-checklist__remove,
+.note-checklist__remove--add {
+  opacity: 0.7;
+}
+
+.note-checklist__remove:hover {
+  opacity: 1 !important;
+  color: var(--text);
+}

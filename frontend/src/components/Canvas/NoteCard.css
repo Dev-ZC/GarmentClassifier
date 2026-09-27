@@ -1,0 +1,405 @@
+/* Modern flat note card - neutral surface with a thin colored accent
+   bar (the note's palette key) instead of a saturated paper background,
+   so a board full of feature-rich notes still reads as clean/minimal.
+   --note-pad keeps every row's left/right inset identical so the card
+   reads as one aligned column instead of a stack of mismatched rows. */
+.note-card {
+  --note-accent: #e0b23f;
+  --note-pad: 12px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+  box-shadow: var(--shadow-sm);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.note-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.note-card:focus-within {
+  border-color: var(--note-accent);
+  box-shadow:
+    0 0 0 1px var(--note-accent),
+    var(--shadow-lg);
+}
+
+.note-card:active {
+  cursor: grabbing;
+}
+
+.note-card[data-color='blue'] { --note-accent: #5b8def; }
+.note-card[data-color='pink'] { --note-accent: #e07a9b; }
+.note-card[data-color='green'] { --note-accent: #5fae6a; }
+.note-card[data-color='purple'] { --note-accent: #9b7fd4; }
+.note-card[data-color='surface'] { --note-accent: var(--border-strong); }
+
+.note-card__accent {
+  height: 3px;
+  flex-shrink: 0;
+  background: var(--note-accent);
+}
+
+/* ---- Header: pin, title, collapse/delete - structural controls only,
+   about what happens to the note itself. Kept visible (just dimmed at
+   rest) rather than hidden-on-hover, so nothing here is a mystery. ---- */
+
+.note-card__header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px var(--note-pad) 8px;
+}
+
+.note-card__title {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 2px 4px;
+}
+
+.note-card__title:focus {
+  outline: none;
+}
+
+.note-card__title::placeholder {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.note-card__icon-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 7px;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.note-card__icon-btn:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.note-card__icon-btn--danger:hover {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.note-card__icon-btn--active {
+  color: var(--note-accent);
+  background: color-mix(in srgb, var(--note-accent) 16%, transparent);
+}
+
+/* ---- Footer: content actions - what to add to the note. A single
+   labeled row below the body so it never interrupts the title-to-body
+   reading flow, with a border to ground it as its own zone. ---- */
+
+.note-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px var(--note-pad);
+  border-top: 1px solid var(--border);
+}
+
+.note-card__divider {
+  width: 1px;
+  height: 16px;
+  flex-shrink: 0;
+  background: var(--border);
+}
+
+.note-card__palette {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.note-card__dot {
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgb(0 0 0 / 0.2);
+  cursor: pointer;
+  transition:
+    transform 0.12s var(--ease-spring),
+    box-shadow 0.12s ease;
+}
+
+.note-card__dot:hover {
+  transform: scale(1.18);
+}
+
+.note-card__dot--active {
+  box-shadow: 0 0 0 2px var(--surface-2), 0 0 0 3.5px var(--text);
+}
+
+.note-card__dot--yellow { background: #e0b23f; }
+.note-card__dot--blue { background: #5b8def; }
+.note-card__dot--pink { background: #e07a9b; }
+.note-card__dot--green { background: #5fae6a; }
+.note-card__dot--purple { background: #9b7fd4; }
+.note-card__dot--surface { background: var(--surface); border-color: var(--border-strong); }
+
+/* Segmented text/checklist switch - two clearly-labeled tabs sharing
+   one pill, the active one lifted with the note's accent, instead of
+   a single ambiguous toggle button. */
+.note-card__mode-switch {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--surface-3);
+}
+
+.note-card__mode-switch button {
+  width: 24px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.note-card__mode-switch button:hover {
+  color: var(--text);
+}
+
+.note-card__mode-btn--active {
+  background: var(--surface-2) !important;
+  color: var(--note-accent) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.note-card__footer-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.note-card__footer-btn:hover {
+  background: var(--border-strong);
+  color: var(--text);
+}
+
+.note-card__swatch-input {
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  opacity: 0;
+  position: absolute;
+}
+
+/* ---- Tags row: shows right under the title, like Trello labels ---- */
+
+.note-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  padding: 0 var(--note-pad) 8px;
+}
+
+.note-card__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 4px 3px 9px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-muted);
+}
+
+.note-card__tag button {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0.6;
+}
+
+.note-card__tag button:hover {
+  opacity: 1;
+}
+
+.note-card__tag-input {
+  font-size: 11px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 999px;
+  padding: 3px 9px;
+  background: none;
+  color: var(--text);
+  width: 96px;
+}
+
+.note-card__tag-input:focus {
+  outline: none;
+  border-color: var(--note-accent);
+}
+
+/* ---- Reference color swatch chip - also shown under the title ---- */
+
+.note-card__swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 var(--note-pad) 8px;
+  padding: 3px 8px 3px 3px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.note-card__swatch-dot {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--swatch-color);
+  border: 1px solid rgb(0 0 0 / 0.15);
+}
+
+.note-card__swatch-remove {
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+  transition: opacity 0.12s ease;
+}
+
+.note-card__swatch:hover .note-card__swatch-remove {
+  opacity: 0.8;
+}
+
+.note-card__swatch-remove:hover {
+  opacity: 1 !important;
+}
+
+/* ---- Body: rich text or checklist ---- */
+
+.note-card__body {
+  flex: 1;
+  min-height: 60px;
+  padding: 0 var(--note-pad) 10px;
+  overflow-y: auto;
+  cursor: text;
+}
+
+/* ---- Resize handle ---- */
+
+.note-card__resize {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.note-card:hover .note-card__resize,
+.note-card:focus-within .note-card__resize {
+  opacity: 1;
+}
+
+.note-card__resize::before {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-faint);
+  border-bottom: 2px solid var(--text-faint);
+  border-radius: 0 0 2px 0;
+}
+
+/* ---- Collapsed: shrinks to a compact chip ---- */
+
+.note-card--collapsed {
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  padding: 6px 6px 6px 0;
+  width: auto !important;
+  height: auto !important;
+  max-width: 220px;
+  cursor: pointer;
+}
+
+.note-card--collapsed .note-card__accent {
+  width: 3px;
+  height: 20px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.note-card__collapsed-text {
+  flex: 1;
+  min-width: 0;
+  margin-left: var(--note-pad);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

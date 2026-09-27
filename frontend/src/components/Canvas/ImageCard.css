@@ -1,0 +1,163 @@
+/* Positioned container for a card + its optional side info panel, so
+   the panel can sit outside the card's overflow:hidden box. */
+.image-card-wrap {
+  position: absolute;
+}
+
+.image-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.image-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
+}
+
+.image-card:active {
+  cursor: grabbing;
+}
+
+.image-card--highlighted {
+  animation: image-card-pulse 1.6s ease-out;
+}
+
+@keyframes image-card-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0.85);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgb(var(--accent-rgb) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0);
+  }
+}
+
+.image-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.image-card__remove {
+  position: absolute;
+  top: 6px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: rgba(12, 15, 20, 0.55);
+  color: #eef2f7;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s var(--ease-spring),
+    background 0.15s ease;
+}
+
+.image-card__remove {
+  right: 6px;
+}
+
+/* Remove stays revealed while hovering anywhere on the wrap (card or
+   open cluster). */
+.image-card-wrap:hover .image-card__remove,
+.image-card__remove:focus-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.image-card__remove:hover {
+  background: rgba(168, 56, 62, 0.85);
+}
+
+.image-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 8px;
+}
+
+.image-card__tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-muted);
+}
+
+.image-card__status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 11px;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+}
+
+.image-card__status--busy {
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.image-card__status--failed {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.image-card__status--failed:hover {
+  background: var(--danger-hover);
+}
+
+.image-card__spinner {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  border-top-color: var(--text-muted);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.image-card__swatches {
+  display: flex;
+  height: 8px;
+  width: 100%;
+}
+
+.image-card__swatch {
+  flex-basis: 0;
+  min-width: 4px;
+}
+

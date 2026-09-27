@@ -1,0 +1,165 @@
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Board switcher sits top-left like a document title - "where am I" -
+   balancing the search bar centered and the action cluster top-right. */
+.app__boards {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 50;
+}
+
+.toolbar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar__icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition:
+    transform 0.18s var(--ease),
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.toolbar__icon-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.toolbar__icon-btn:active {
+  transform: translateY(0) scale(0.94);
+  box-shadow: var(--shadow-sm);
+  transition-duration: 0.06s;
+}
+
+.toolbar__icon-btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.toolbar__icon-btn--primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+/* Element picker: one button fans out into a small dropdown of
+   text/shape kinds so the toolbar stays compact. */
+.toolbar__menu-wrap {
+  position: relative;
+}
+
+.toolbar__icon-btn--open {
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+}
+
+.toolbar__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  animation: toolbar-menu-in 0.15s var(--ease);
+}
+
+.toolbar__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.toolbar__menu-item svg {
+  color: var(--text-muted);
+  transition: color 0.12s ease;
+}
+
+.toolbar__menu-item:hover {
+  background: var(--surface-3);
+}
+
+.toolbar__menu-item:hover svg {
+  color: var(--text);
+}
+
+@keyframes toolbar-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.app__error {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-hover);
+  color: var(--danger-text);
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  animation: app-error-in 0.25s var(--ease);
+}
+
+@keyframes app-error-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
